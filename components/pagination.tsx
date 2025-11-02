@@ -17,9 +17,11 @@ export default function Pagination({
 }: PaginationProps) {
   if (totalPage <= 1) return null;
 
-  const getPageUrl = () => {
-    
-  }
+  const getPageUrl = (page: number) => {
+    const params = new URLSearchParams({ ...searchParams, page: String(page) });
+
+    return `${baseUrl}?${params.toString()}`;
+  };
 
   const getVisiblePages = () => {
     const delta = 2;
@@ -56,7 +58,7 @@ export default function Pagination({
   return (
     <nav className="flex items-center justify-center gap-1">
       <Link
-        href=""
+        href={getPageUrl(currentPage - 1)}
         className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg ${
           currentPage <= 1
             ? "cursor-not-allowed text-gray-400 bg-gray-100"
@@ -68,8 +70,15 @@ export default function Pagination({
       </Link>
 
       {visiblePages.map((page, key) => {
-        if (page === "...") {
-          return <span className="px-3 py-2 text-sm text-gray-500">...</span>;
+        if (page === ". . .") {
+          return (
+            <span
+              key={`dots-${key}`}
+              className="px-3 py-2 text-sm text-gray-500"
+            >
+              ...
+            </span>
+          );
         }
 
         const pageNumber = page as number;
@@ -77,13 +86,13 @@ export default function Pagination({
 
         return (
           <Link
-            href=""
-            key={key}
+            key={`page-${pageNumber}`}
+            href={getPageUrl(pageNumber)}
             className={`px-3 py-2 text-sm font-semibold rounded-lg ${
               isCurrently
                 ? "bg-purple-600 text-white"
                 : "text-gray-700 hover:bg-gray-100 bg-white border border-gray-300"
-            } `}
+            }`}
           >
             {pageNumber}
           </Link>
@@ -91,7 +100,7 @@ export default function Pagination({
       })}
 
       <Link
-        href=""
+        href={getPageUrl(currentPage + 1)}
         className={`flex items-center px-3 py-2 text-sm font-meium rounded-lg ${
           currentPage >= totalPage
             ? "text-gray-400 cursor-not-allowed bg-gray-100"

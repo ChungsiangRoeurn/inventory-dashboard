@@ -1,7 +1,6 @@
 import { UserButton } from "@stackframe/stack";
 import { BarChart3, Package, Plus, Settings } from "lucide-react";
 import Link from "next/link";
-import React from "react";
 
 export default function Sidebar({
   currentPath = "/dashboard",

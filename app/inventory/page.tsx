@@ -14,27 +14,25 @@ export default async function InventoryPage({
 
   const params = await searchParams;
   const q = (params.q || "").trim();
+  const pageSize = 10;
+  const page = Math.max(1, Number(params.page ?? 1));
 
   const where = {
     userId,
     ...(q ? { name: { contains: q, mode: "insensitive" as const } } : {}),
   };
 
-  //   const totalProducts = await prisma.product.findMany({
-  //     where,
-  //   });
-
   const [totalCount, items] = await Promise.all([
     prisma.product.count(),
     prisma.product.findMany({
       where,
+      orderBy: { createdAt: "desc" },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
     }),
   ]);
 
-  const pageSize = 10;
-
   const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
-  const page = Math.max(1, Number(params.page ?? 1));
 
   return (
     <div className="min-h-screen bg-gray-50">
