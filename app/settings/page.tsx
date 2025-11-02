@@ -1,6 +1,5 @@
 import Sidebar from "@/components/sidebar";
 import { AccountSettings } from "@stackframe/stack";
-import React from "react";
 
 export default function SettingPage() {
   return (
